@@ -201,6 +201,435 @@ document.body.innerText = JSON.stringify(user)
 
 
 ```js
+const user = {
+  name: 'Weslley',
+  age: 29,
+  address: {
+    street: 'Rua Abacate',
+    numer: 174
+  },
+};
 
 
+document.body.innerText = user.address.street
+
+quando tento acessar uma propriedade que pode não existir, precisamos tratar esse erro
+document.body.innerText = user.address ? user.address.street : 'Não informado'
+
+```
+mas o exemplo acima tem um problema para o seguinte caso
+
+```js
+const user2 = {
+  name: 'Weslley',
+  age: 29,
+  address: {
+    street: 'Rua Abacate',
+    numer: 174,
+    zip: {
+      code: '78945000',
+      city: 'Abacate City',
+    },
+  },
+};
+
+fazer o tratamento vai ser complicado, devido o aninhamento
+document.body.innerText = user2.address
+ ? user2.address.zip 
+  ? user2.address.zip.code
+  : 'Não informado'
+: 'Não informado'
+
+
+// outra forma de escrever o código acima é da seguinte forma
+// unindo optional chaining e Nullish Coalescing
+document.body.innerText = user2.address?.zip?.code ?? 'Não informado'
+```
+
+Utilizando com funções
+
+```js
+const user3 = {
+  name: 'Weslley',
+  age: 29,
+  address: {
+    street: 'Rua Abacate',
+    numer: 174,
+    zip: {
+      code: '78945000',
+      city: 'Abacate City',
+    },
+    // showFullAddress() {
+    //   return 'ok';
+    // }
+  },
+};
+
+// verifica existência da função showFullAddress
+document.body.innerText = user3.address?.showFullAddress?.()
+```
+
+
+```js
+
+// Optional Chaining
+
+const user = {
+  name: 'Weslley',
+  age: 29,
+  // address: {
+  //   street: 'Rua Abacate',
+  //   numer: 174,
+  //   zip: {
+  //     code: '78945000',
+  //     city: 'Abacate City',
+  //   },
+  //   showFullAddress() {
+  //     return 'ok';
+  //   }
+  // },
+};
+
+const key = 'state';
+// verifica existência da função
+document.body.innerText = user.address?.[key]
+
+```
+
+
+### Métodos de Array
+
+#### Map
+
+
+```js
+const array= [1, 2, 3, 4, 5];
+
+// for tradicional
+for (const i of array) {
+  document.body.innerText += i
+}
+
+// forEach não é bom para percorrer e aplicar uma ação dentro do array
+array.forEach(item => {
+  document.body.innerText += item
+})
+```
+
+
+```js
+// map sempre retorna um novo array do tamanho do original
+const novoArray = array.map(item => {
+  return item * 2
+})
+
+document.body.innerText = JSON.stringify(novoArray)
+
+
+// verificar paridade
+const novoArray = array.map(item => {
+  if (item % 2 === 0) {
+    return item * 10;
+  }
+  return item;
+});
+
+document.body.innerText = JSON.stringify(novoArray)
+```
+
+
+#### Filter
+
+Sempre retorna uma lista dos elementos filtrados
+
+```js
+const array = [1, 2, 3, 4, 5];
+
+// igual ==== diferente !==
+const novoArray = array.filter(item => item % 2 !== 0)
+document.body.innerText = JSON.stringify(novoArray)
+
+
+const novoArray = array
+  .filter(item => item % 2 !== 0)
+  .map(item => item * 10)
+
+document.body.innerText = JSON.stringify(novoArray)
+```
+
+#### Every
+Retorna um booleano a partir da consulta aplicada na array
+
+```js
+const array = [1, 2, 3, 4, 5, 'abacate'];
+
+// mesmo objetivo
+// const todosItensSaoNumeros = array.every(item => typeof item === 'number')
+const todosItensSaoNumeros = array.every(item => {
+  return typeof item === 'number'
+})
+
+document.body.innerText = JSON.stringify(todosItensSaoNumeros)
+```
+
+#### Some
+
+Algum elemento é XPTO, retorna booleano
+```js
+
+const array = [1, 2, 3, 4, 5, 'abacate'];
+
+const peloMenosUmItemNaoUmNumero = array.some(item => {
+  return typeof item === 'number';
+})
+
+document.body.innerText = JSON.stringify(peloMenosUmItemNaoUmNumero)
+```
+
+
+#### Find
+
+Retorna o primeiro elemento que tenha match com a condição, caso nenhum elemento da array satisfasa será retornado undefined.
+
+
+```js
+const array = [1, 2, 3, 4, 5, 'abacate'];
+
+const par = array.find(item => {
+  return item % 2 === 0;
+})
+
+document.body.innerText = JSON.stringify(par)
+```
+
+#### findIndex
+
+Retorna o ínidice do primeiro elemento que tenha match com a condição, caso nenhum elemento da array satisfasa será retornado undefined.
+
+
+```js
+const array = [1, 2, 3, 4, 5, 'abacate'];
+
+const parIndex = array.findIndex(item => {
+  return item % 2 === 0;
+})
+
+document.body.innerText = JSON.stringify(parIndex)
+```
+
+#### Reduce
+Utilizado para criar uma nova estrutura de dados baseado no array.
+
+
+```js
+const array = [1, 2, 3, 4, 5];
+
+// accumulator e objeto
+document.body.innerText = 'acc, item \n'
+const soma = array.reduce((acc, item) => {
+  document.body.innerText += acc + ' ,' + item + '\n'
+
+  // reduce espera o novo return do acc
+  return acc + item
+}, 0)
+
+document.body.innerText = JSON.stringify(soma)
+```
+
+
+### Template Literals
+
+```js
+// const name = 'Weslley';
+const name = null;
+const message = `Bem-vindo, ${name ? name : 'visitante'}`;
+document.body.innerText = message
+```
+
+### Promises
+Precisamos que algumas ações da nossa aplicação seja assíncrona, seus princípais métodos são 
+then, catch, finally, async e await.
+
+- then: recebe o response de sucesso
+- catch: trata o erro
+- finally: após finalizado o promise ele atua, independente do resultado.
+
+Exemplo básico
+```js
+// dessa forma é uma funcao
+const somaDoisNumeros = (a, b) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(a + b);
+    }, 2000);
+  });
+}
+
+// then recebe operação válida, catch trata o erro
+somaDoisNumeros(2, 3)
+  .then(soma => {
+    document.body.innerText = soma
+  })
+  .catch(err => {
+    console.log(err)
+  })
+```
+
+
+Exemplo utilizando fetch
+
+```js
+
+fetch('https://api.github.com/users/weslleyalmeid')
+  .then(response => {
+          response.json ().then(body => {
+          console.log(body);
+        })
+  })
+  .catch(err => {
+    console.log(err)
+  })
+
+// codigo anterior melhorado, utilizado multiplos .then
+
+fetch('https://api.github.com/users/weslleyalmeid')
+  .then(response => {
+    return response.json()
+  })
+  .then(body => {
+    console.log(body)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  .finally(console.log('Finalziado')
+```
+
+Incluindo finally
+
+
+```js
+fetch('https://api.github.com/users/weslleyalmeid')
+  .then(response => {
+    return response.json()
+  })
+  .then(body => {
+    console.log(body)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  .finally(() => {
+    console.log('Finalizado')
+  })
+```
+
+Refatorando código anterior e utilizando async e await
+```js
+
+async function buscaDadosNoGithub(){
+  try {
+    const response = await fetch('https://api.github.com/users/weslleyalmeid');
+    const body = await response.json();
+  
+    console.log(body)
+  } catch (err) {
+    console.log(err)
+  } finally {
+    console.log('Finalizado')
+  }
+
+}
+
+buscaDadosNoGithub();
+```
+
+Acessar elemento de promisses
+```js
+async function buscaDadosNoGithub(){
+  try {
+    const response = await fetch('https://api.github.com/users/weslleyalmeid');
+    const body = await response.json();
+  
+    return body.name;
+  } catch (err) {
+    console.log(err)
+  } finally {
+    console.log('Finalizado')
+  }
+}
+
+// necessario, pois todo retorno de uma classe async é uma Promise
+buscaDadosNoGithub().then(name => {
+  console.log(name)
+})
+
+```
+
+
+### ES Modules
+
+Named Export, quando importamos como o nome da função ou variável.
+Default, é possível renomear o nome da função
+
+./lib/math.js
+```js
+export const PI = Math.PI
+
+export function soma(a, b){
+    return a + b
+}
+
+
+export function sub(a, b){
+    return a - b
+}
+```
+
+./lib/sum.js
+```js
+export default function sum(a, b){
+    return a + b
+}
+```
+
+```js
+
+import { soma, sub, PI } from "./lib/math";
+import abacate from "./lib/sum";
+
+// named export, preferível
+console.log(soma(10, 20))
+console.log(sub(10, 20))
+console.log(PI)
+
+// default
+console.log(abacate(10, 20))
+
+```
+
+Importando todos os métodos
+```js
+import * as math from "./lib/math";
+
+console.log(math)
+
+```
+
+usando alias
+```js
+import {soma as sum} from "./lib/math";
+
+console.log(sum(1, 2))
+
+```
+
+export uma lib externa em outro arquivo, muito raro de ser utilizado
+```js
+// ajustado o arquivo sum.js com o seguinte código
+export { soma } from './math';
+
+// importando no main.js
+import { soma } from "./lib/sum";
+console.log(soma(1, 2))
 ```
