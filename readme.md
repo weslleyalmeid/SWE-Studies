@@ -633,3 +633,156 @@ export { soma } from './math';
 import { soma } from "./lib/sum";
 console.log(soma(1, 2))
 ```
+
+
+## APRENDA REACT EM 2 HORAS - 
+Matheus Battisti - Hora de Codar
+
+### Image
+
+```js
+// dentro do assets
+import imagem2 from "../assets/img2.jpg"
+
+const Images = () => {
+
+    return (
+        <div>
+            {/* procura no public */}
+            <img src="/img1.jpg" />
+            <img src={imagem2} />
+        </div>
+    );
+};
+
+export default Images;
+```
+
+### Hooks
+Capturam o evento, trata e renderiza o novo valor
+
+```js
+import { useState } from "react";
+
+// consultar, alterar, sempre utilizar dessa forma
+const [novaIdade, setNovaIdade] = useState(40);
+
+const changeNewAge = () => {
+    setNovaIdade(45);
+}
+
+<p>Idade: {novaIdade}</p>
+<button onClick={changeNewAge}>Mudar idade</button>
+```
+
+
+### Looping
+
+```js
+const List = () => {
+    const items = [
+        {
+            id: 1,
+            name: "Matheus",
+        },
+        {
+            id: 2,
+            name: "João",
+        },
+        {
+            id: 3,
+            name: "Pedro",
+        }
+    ];
+
+    return <div>
+        {items.map((item) => (
+            <p key={item.id}>{item.id} - {item.name}</p>
+        ))}
+    </div>
+}
+
+export default List;
+```
+
+
+### Renderização condicional
+
+```js
+const RenderCond = () => {
+
+    const x = 12;
+    const y = 10;
+
+    return (
+    <div>
+      {x > 5 && <p>X é maior que 5</p>}
+      {x > y ? <p>{x} é maior que {y}</p> : <p>{x} é não é maior que {y}</p>}
+    </div>
+    );
+};
+
+export default RenderCond;
+```
+
+### Props
+
+Recebe o atributo como método do objeto props
+```js
+// Props.js
+const Props = (props) => {
+    const y = 10;
+
+    return (
+    <div>
+      {props.x > 5 && <p>X é maior que 5</p>}
+      {props.x > y ? <p>{props.x} é maior que {y}</p> : <p>{props.x} é não é maior que {y}</p>}
+    </div>
+    );
+};
+
+export default Props;
+
+
+// App.js
+<Props  x={10} />
+```
+
+Utilizando props com desestruturação
+```js
+const Props = ({ x, y }) => {
+  // const Props = (props) => { 
+
+    return (
+    <div>
+      {x > 5 && <p>X é maior que 5</p>}
+      {x > y ? <p>{x} é maior que {y}</p> : <p>{x} é não é maior que {y}</p>}
+
+    </div>
+    );
+};
+
+
+// App.js
+<Props  x={10} y={20} />
+```
+
+
+### Fragments
+
+Possibilita trabalhar com elementos sem a necessidade de elementos pai.
+
+```js
+const Fragments = ({ x }) => {
+      return (
+        <>
+            <p>Primeiro</p>
+            <p>Segundo</p>
+            <p>Terceiro</p>
+        </>
+      );
+  };
+  
+  export default Fragments;
+
+```
