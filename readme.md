@@ -786,3 +786,33 @@ const Fragments = ({ x }) => {
   export default Fragments;
 
 ```
+
+
+## ToDo em React
+
+Instalação de novos plugins
+
+```js
+ npm install json-server react-icons
+```
+
+O index.css é o css global da aplicação
+```css
+html {
+  background: linear-gradient(
+    195deg,
+    rgba(240, 98, 146, 1) 0%,
+    rgba(221, 89, 133, 1) 98%
+    );
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica;
+}
+```
+
+
+App.js é onde centraliza todo o código da aplicação
