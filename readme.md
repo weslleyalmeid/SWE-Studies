@@ -816,3 +816,36 @@ body {
 
 
 App.js é onde centraliza todo o código da aplicação
+
+
+## Preact e Tailwind
+
+```sh
+npm init vite@latest
+cd preact-tailwind
+npm install
+
+# https://tailwindcss.com/docs/guides/vite
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+npm run dev
+```
+
+Criar o Signals no signals/store.js
+```js
+import { signal } from "@preact/signals";
+
+export const count = signal(0);
+
+```
+para adicionar no projeto
+
+```sh
+npm install @preact/signals
+```
+
+adicionar nanoid para gerar id randomicas
+
+```sh
+npm i nanoid
+```
