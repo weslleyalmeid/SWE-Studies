@@ -1048,3 +1048,24 @@ O atributo order é útil para controlar a ordem de exibição dos elementos fle
 
 O atributo align-self define como o elemento flexível deve ser alinhado ao longo do eixo transversal do container. O atributo align-self tem o mesmo efeito que a propriedade align-items, mas só é aplicado a um elemento flexível específico.
 
+
+## Facebook com Tailwindcss
+
+### Adicionar cor personalizada
+
+adicione o colors no arquivo tailwind.config.js e para utilizar com texto bata utilizar text-blue-facebook
+
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./src/**/*.{html,js}"],
+  theme: {
+    extend: {
+      colors: {
+        "blue-facebook": "#1877F2"
+      }
+    },
+  },
+  plugins: [],
+}
+```
