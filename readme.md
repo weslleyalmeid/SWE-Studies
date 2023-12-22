@@ -849,3 +849,202 @@ adicionar nanoid para gerar id randomicas
 ```sh
 npm i nanoid
 ```
+
+
+## Flex Box
+
+Exemplo de utilização do flex, lembrando que para utilizar as propriedades do flex é necessário que o display esteja atribuido o valor de flex. 
+
+### Flex Contêiner (Coletivo, Plural)
+Atua sobre elementos aninhados. Os comandos mais utilizados são **flex-direction, justify-content, align items** e gap.
+
+#### flex-direction
+Tem as opções row, columns, column-reverse e row-reverse
+```css
+div {
+    background: rgb(135, 135, 135);
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    /* por padrao flex e row */
+    flex-direction: row;
+    /* flex-direction: column; */
+    /* flex-direction: column-reverse; */
+    /* flex-direction: row-reverse; */
+}
+```
+
+#### flex-wrap
+
+Define a quebra de linha, nowarp, wrap e wrap-reverse. Muito importate saber utilizar para não quebrar o layout
+
+
+```css
+div {
+    background: rgb(135, 135, 135);
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    /* por padrao flex e row */
+    flex-direction: row;
+    /* por padrao nowrap */
+    flex-wrap: wrap;
+}
+```
+
+#### flex-flow
+
+Unificação do flex direction + wrap
+```css
+div {
+    background: rgb(135, 135, 135);
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    /* flex-flow: direction wrap */
+    flex-flow: row wrap;
+}
+```
+
+#### justify-content
+
+Vai realizar o alinhamento dos itens no eixo principal, a definição do eixo principal é baseado no flex-direction row ou column.
+
+```mermaid
+%%{init: {'theme':'neutral'}}%%
+graph LR
+    
+    A[<b>main axis</b> = eixo principal <br> <b>cross axis</b> = eixo secundário]
+    A --> B(flex-direction) 
+    B --> C[row]
+    C --> E[<b>main axis</b> = eixo horizontal]
+    C --> F[<b>cross axis</b> = eixo vertical]
+    B --> D[column]
+    D --> G[<b>main axis</b> = eixo vertical]
+    D --> H[<b>cross axis</b> = eixo horizontal]
+```
+
+as principais são as seguintes
+
+- **flex-start:**	Alinha os elementos no início do container, deixando o espaço livre no final
+- **flex-end:**	Alinha os elementos no final do container, deixando o espaço livre no início
+- **center:**	Centraliza os elementos no container
+- **space-between:**	Espaça uniformemente os elementos entre si, deixando o mesmo espaço livre nas extremidades do container
+- **space-around:**	Espaça uniformemente os elementos entre si, deixando o mesmo espaço livre nas extremidades e no centro do container
+- **space-evenly:**	Espaça uniformemente os elementos entre si, deixando o mesmo espaço livre entre todos os elementos
+
+
+```css
+div {
+    background: rgb(135, 135, 135);
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+```
+
+#### align-items
+
+Responsável por alinhar os itens no eixo secundário, tem os mesmos atributos do justify-content.
+
+```css
+div {
+    background: rgb(135, 135, 135);
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    /* eixo principal */
+    justify-content: center;
+    /* eixo secundario */
+    align-items: flex-end;
+}
+```
+
+#### align-content
+
+Responsável por alinhar os itens no eixo secundário, muito parecido 
+
+- **align-items:** controla como os elementos flexíveis são alinhados ao longo do eixo transversal do container. O eixo transversal é o eixo perpendicular ao eixo principal.
+
+- **flex-start:** alinha os elementos no topo do container, deixando o espaço livre no fundo.
+
+- **flex-end:** alinha os elementos no fundo do container, deixando o espaço livre no topo.
+
+- **center:** centraliza os elementos no container.
+
+- **stretch:** estica os elementos para preencher o container, ignorando as alturas definidas.
+
+- **baseline:** alinha os elementos com a baseline dos seus conteúdos.
+
+#### gap
+
+A propriedade gap define **o espaço entre os elementos flexíveis** em um container. O espaço é aplicado ao longo do eixo transversal do container, que é o eixo perpendicular ao eixo principal.
+
+- A propriedade gap só é aplicada se o container tiver uma largura ou altura definida.
+- A propriedade gap não é aplicada se os elementos flexíveis forem do mesmo tamanho.
+
+
+### Flex Items (Individual, Singular)
+
+Atua nos items do container.
+
+#### flex-basis
+
+O atributo flex-basis define o tamanho inicial do elemento flexível. O tamanho inicial é usado como base para o cálculo do tamanho do elemento quando o container tem espaço suficiente ou insuficiente. Por exemplo, você pode usar o atributo flex-basis para garantir que um elemento flexível tenha sempre uma largura ou altura mínima.
+
+```css
+section {
+    background: rgb(147, 1, 191);
+    /* width: 300px; */
+    /* height: 300px; */
+    margin: 10px;
+    border: 2px solid black;
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    flex-basis: 240px;
+}
+```
+
+
+#### flex-grow
+
+O atributo flex-grow é útil para controlar como o elemento flexível deve crescer se o container tiver espaço livre. Por exemplo, você pode usar o atributo flex-grow para garantir que um elemento flexível ocupe sempre a mesma largura ou altura, mesmo se o tamanho do container mudar.
+
+No exemplo abaixo, até 200px crescem iguais, após 200px o .b2 crescre 2 vezes mais do que o .b1.
+```css
+.b1 {
+    flex-grow: 1;
+    width: 200px;
+}
+
+.b2 {
+    flex-grow: 2;
+    width: 200px;
+}
+```
+
+#### flex-shrink
+
+O atributo flex-shrink é útil para controlar como o elemento flexível deve encolher se o container tiver espaço insuficiente. Por exemplo, você pode usar o atributo flex-shrink para garantir que um elemento flexível não ocupe mais espaço do que o necessário, mesmo se o tamanho do container diminuir.
+
+#### flex
+
+Flex é um atalho para flex-basis + flex-grow + flex-shrink
+
+#### order
+
+O atributo order é útil para controlar a ordem de exibição dos elementos flexíveis. Por exemplo, você pode usar o atributo order para colocar um elemento flexível específico no início ou no final de um container.
+
+#### align-self
+
+O atributo align-self define como o elemento flexível deve ser alinhado ao longo do eixo transversal do container. O atributo align-self tem o mesmo efeito que a propriedade align-items, mas só é aplicado a um elemento flexível específico.
+
