@@ -661,6 +661,18 @@ export default Images;
 ### Hooks
 Capturam o evento, trata e renderiza o novo valor
 
+
+#### useState
+
+O userState permite gerenciar o estado de um componente funcional.
+
+O hook useState retorna um array de duas propriedades:
+
+- **state:** o valor atual do estado.
+- **setState:** uma função que pode ser usada para atualizar o estado.
+
+Basicamente trata uma variável, que, toda vez que troca de valor a tela irá "recarregar os novos valores".
+
 ```js
 import { useState } from "react";
 
@@ -675,6 +687,13 @@ const changeNewAge = () => {
 <button onClick={changeNewAge}>Mudar idade</button>
 ```
 
+#### useEffect
+
+O hook useEffect permite executar efeitos colaterais em um componente funcional. Efeitos colaterais são operações que podem afetar o estado do DOM ou do sistema operacional.
+
+#### useRef
+
+O hook useRef permite acessar um elemento DOM ou um valor de estado de maneira segura.
 
 ### Looping
 
@@ -786,6 +805,13 @@ const Fragments = ({ x }) => {
   export default Fragments;
 
 ```
+
+## React
+
+
+- Os elementos sempre precisam ter um elemento pai. Isso é porque os elementos React precisam ser renderizados dentro de um componente.
+- O código deve ser organizado em componentes pequenos e reutilizáveis. Isso torna o código mais fácil de entender e manter.
+- Use os hooks do React para gerenciar estado e efeitos colaterais. Os hooks tornam o código mais conciso e legível.
 
 
 ## ToDo em React
