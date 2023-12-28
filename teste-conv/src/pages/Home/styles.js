@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import breakpoints from "../../styles/breakpoints";
 
 export const Container = styled.div`
   display: flex;
@@ -11,6 +12,17 @@ export const Container = styled.div`
 export const ContainerItems = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 240px);
-
   gap: 16px;
+
+  @media ${breakpoints.bg} {
+    grid-template-columns: repeat(3, 240px);
+  }
+
+  @media ${breakpoints.md} {
+    grid-template-columns: repeat(2, 240px);
+  }
+
+  @media ${breakpoints.sm} {
+    grid-template-columns: repeat(1, 80vw);
+  }
 `

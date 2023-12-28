@@ -16,7 +16,7 @@ const Card = ({ movieData }) => {
           <p>{movieData.runtimeInMinutes} min</p>
         </div>
 
-        <div className='wrapper-award'>
+        <div className='wrapper-awards'>
           <img src={AwardIcon} className='award-logo' alt='award logo' />
           <p>{movieData.academyAwardWins} Wins & {movieData.academyAwardNominations} Nominations</p>
         </div>

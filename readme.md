@@ -1161,3 +1161,6 @@ module.exports = {
 - Pensar todos os elementos dentro de caixas, isso irá facilitar com os styles
 - Elementos dinâmicos na tela, caso queira travar quantidades a serem mostradas, grid é uma boa escolha
 - Mostrar elementos na tela baseado em ações, sempre utilizar os Hooks apropriados
+- Criar breakpoints.js para padronizar pontos de quebra
+- Lembrar que @media no css é estilo em cascata, é necessário colocar aninhado ao tag de interesse e abaixo do código css
+- os breakpoints são setados do maior para o menor no @media bg > md > sm
