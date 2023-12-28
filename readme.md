@@ -691,9 +691,50 @@ const changeNewAge = () => {
 
 O hook useEffect permite executar efeitos colaterais em um componente funcional. Efeitos colaterais são operações que podem afetar o estado do DOM ou do sistema operacional.
 
+Toda vez que a variável movies sofrer uma ação, o useEffect irá executar esse script.
+
+```js
+  useEffect(() => {
+    if (movies && movies.length > 0) {
+      aveMovies(movies)
+    }
+
+  }, [movies])
+
+```
+
 #### useRef
 
 O hook useRef permite acessar um elemento DOM ou um valor de estado de maneira segura.
+
+O input ao sofrer uma ação, por meio do onChange direciona para a function que por sua vez, executa uma tarefa, inclusive utilizando o hook useRef para acessar o valor do elemento passado atráves do input.
+
+```js
+const input = useRef()
+
+
+function inputChange() {
+  const newMovies = movies.filter(movie =>
+    movie.name.toLowerCase().includes(input.current.value.toLowerCase())
+  )
+
+  aveMovies(newMovies)
+  setFilteredMovies(newMovies)
+}
+
+
+
+<div className='ave-values'>
+
+  <div>
+    <p>Ave. movie runtime: {aveValues.runtime} min</p>
+    <p>Ave. movie budget: ${aveValues.budget}M</p>
+  </div>
+  <input placeholder='Filter movies by name' ref={input} onChange={inputChange} />
+</ div>
+
+
+```
 
 ### Looping
 
@@ -1074,6 +1115,24 @@ O atributo order é útil para controlar a ordem de exibição dos elementos fle
 
 O atributo align-self define como o elemento flexível deve ser alinhado ao longo do eixo transversal do container. O atributo align-self tem o mesmo efeito que a propriedade align-items, mas só é aplicado a um elemento flexível específico.
 
+## Grid CSS
+
+O CSS Grid é uma propriedade CSS que permite a criação de layouts de grade bidimensionais. Ele é usado para dividir um elemento pai em linhas e colunas, nas quais os elementos filhos podem ser posicionados.
+
+O CSS Grid é uma alternativa ao layout flexbox, que é mais adequado para layouts unidimensionais. O CSS Grid é mais flexível e poderoso, permitindo a criação de layouts mais complexos e personalizados.
+
+Os principais atributos do CSS Grid são:
+
+- **display:** define o elemento como uma grade.
+- **grid-template-columns:** define as colunas da grade.
+- **grid-template-rows:** define as linhas da grade.
+- **grid-column-start:** define a coluna inicial do elemento.
+- **grid-column-end:** define a coluna final do elemento.
+- **grid-row-start:** define a linha inicial do elemento.
+- **grid-row-end:** define a linha final do elemento.
+- **grid-template-areas** define as áreas da grade. Ela é usada para posicionar os elementos filhos em uma grade de forma mais fácil e intuitiva.
+
+
 
 ## Facebook com Tailwindcss
 
@@ -1095,3 +1154,10 @@ module.exports = {
   plugins: [],
 }
 ```
+
+
+## Projeto + Responsividade
+
+- Pensar todos os elementos dentro de caixas, isso irá facilitar com os styles
+- Elementos dinâmicos na tela, caso queira travar quantidades a serem mostradas, grid é uma boa escolha
+- Mostrar elementos na tela baseado em ações, sempre utilizar os Hooks apropriados
