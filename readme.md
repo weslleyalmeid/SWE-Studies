@@ -1164,3 +1164,321 @@ module.exports = {
 - Criar breakpoints.js para padronizar pontos de quebra
 - Lembrar que @media no css é estilo em cascata, é necessário colocar aninhado ao tag de interesse e abaixo do código css
 - os breakpoints são setados do maior para o menor no @media bg > md > sm
+
+## React Hooks
+
+### useState
+
+Uma forma de armazenar state em componentes funcionais.
+
+```js
+import { useState } from 'react'
+import './App.css'
+
+function App() {
+  const [count, setCount] = useState(0)
+
+  const incrementCount = () => {
+    setCount((prevState) => prevState + 1);
+  }
+
+  return (
+    <>
+      <div>
+        <h1>{count}</h1>
+        <button onClick={incrementCount}>Increment</button>
+      </div>
+    </>
+  )
+}
+
+export default App
+```
+
+### useEffect
+
+Utilizado quando queremos executar algo ao ocorrer algum evento.
+Uma das funções mais utilizadas no cotidiano, inclusive, não é possível criar o useEffect como assíncrono nativamente, porém, é possível fazer um async dentro da area function dele.
+
+```js
+import { useState, useEffect } from 'react'
+
+function App() {
+  const [items, setItems] = useState([])
+  const [resourceType, setResourceType] = useState('posts');
+
+  // somente escuta quando resourceType mudar
+  useEffect(() => {
+    const fetchResourceTypes = async () => {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/${resourceType}`);
+      const responseJSON = await response.json();
+      setItems(responseJSON)
+    }
+
+    fetchResourceTypes();
+  }, [resourceType]);
+
+  // so atualiza quando a pagina e atualizada
+  useEffect(() => {
+    // componentDidMount
+    console.log('componentDidMount');
+
+    // componentWillUnmount
+    return () => {
+      console.log('componentWillUnmount');
+    };
+  }, []);
+
+  const changeResourceType = (resourceType) => {
+    setResourceType(resourceType);
+  };
+
+  return (
+    <>
+      <div>
+        <h1>{resourceType}</h1>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <button onClick={() => changeResourceType('posts')}>posts</button>
+          <button onClick={() => changeResourceType('comments')}>comments</button>
+          <button onClick={() => changeResourceType('todos')}>todos</button>
+        </div>
+
+        {items.map(item => <p key={item.id}>{item.id}</p>)}
+      </div>
+    </>
+  )
+}
+
+export default App
+```
+
+
+### useRef
+
+Guarda um valor, mas quando ele é atualizado, o componente não é atualizado novamente.
+
+**Contagem de atualização do renderState**
+
+O useRef é bom para quando você quer persistir o valor em todo ciclo de vida do componente, mas você não quer que no momento de alteração o componente seja renderizado.
+
+```js
+import { useState, useEffect, useRef } from 'react'
+
+function App() {
+  const [name, setName] = useState('');
+
+  const renders = useRef(0);
+
+  useEffect(() => {
+    renders.current = renders.current + 1;
+  })
+  
+
+  return (
+    <>
+      <div>
+      <input value={name} onChange={(e) => setName(e.target.value)} />
+        <p>Hello! My name is {name}</p>
+        <p>Rendes: {renders.current}</p>
+      </div>
+
+    </>
+  )
+}
+
+export default App
+```
+
+**Utilização para referencimento de algum elemento html**
+
+```js
+import { useState, useEffect, useRef } from 'react'
+
+function App() {
+  const [name, setName] = useState('');
+
+  const inputRef = useRef();
+
+  console.log(inputRef.current);
+
+  const focusInput = () => {
+    inputRef.current.focus();
+  };
+  
+  return (
+    <>
+      <div>
+      <input ref={inputRef} value={name} onChange={(e) => setName(e.target.value)} />
+        <p>Hello! My name is {name}</p>
+        <button onClick={focusInput}>Focus Input</button>
+      </div>
+
+    </>
+  )
+}
+
+export default App
+```
+
+**Guardar o valor anterior de um state**
+
+```js
+import { useState, useEffect, useRef } from 'react'
+
+function App() {
+  const [name, setName] = useState('');
+
+  const previousName = useRef();
+
+  useEffect(() => {
+    previousName.current = name;
+  }, [name])
+
+
+  return (
+    <div>
+      <input value={name} onChange={(e) => setName(e.target.value)} />
+      <p>Hello! My name is {name}</p>
+      <p>And my name was {previousName.current}</p>
+    </div>
+  )
+}
+
+export default App
+```
+
+
+### useReducer
+
+Parecido com useState, também efetua o gerencimento do state dos componentes.
+
+Utilize o useReducer quando o seu useState estiver muito complexo/grande ou quando várias propriedados do state dependerem uma da outra.
+
+**Atualizando valor do elemento**
+
+```js
+import { useReducer } from 'react'
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'increment':
+      return {
+        counter: state.counter + 1,
+      };
+    case 'decrement':
+      return {
+        counter: state.counter - 1,
+      };
+    default:
+      return state;
+  }
+};
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, { counter: 0 });
+
+  return (
+    <div>
+      <p>{state.counter}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
+    </div>
+  );
+};
+
+export default App
+
+```
+
+
+```js
+import { useReducer, useState } from 'react'
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'add-task':
+      return {
+        tasks: [
+          ...state.tasks,
+          { name: action.payload, isCompleted: false },
+        ]
+      };
+    default:
+      return state;
+  }
+};
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, { tasks: [] });
+  const [inputValue, setInputValue] = useState('');
+
+  return (
+    <div>
+      <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+      <button
+        onClick={() => {
+          dispatch({ type: 'add-task', payload: inputValue });
+          setInputValue('');
+        }}
+      >Adicionar</button>
+
+      {state.tasks.map((task) => (
+        <p>{task.name}</p>
+      ))}
+    </div>
+  );
+};
+
+export default App
+```
+
+
+```js
+import { useReducer, useState } from 'react'
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'add-task':
+      return {
+        ...state,
+        tasks: [
+          ...state.tasks,
+          { name: action.payload, isCompleted: false },
+        ]
+      };
+    case 'toggle-task':
+      return {
+        ...state,
+        tasks: state.tasks.map((item, index) => index === action.payload ? {...item, isCompleted: !item.isCompleted} : item)
+      }
+    default:
+      return state;
+  }
+};
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, { tasks: [] });
+  const [inputValue, setInputValue] = useState('');
+
+  return (
+    <div>
+      <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+      <button
+        onClick={() => {
+          dispatch({ type: 'add-task', payload: inputValue });
+          setInputValue('');
+        }}
+      >Adicionar</button>
+
+      {state.tasks.map((task, index) => (
+        <p 
+          onClick={() => dispatch({type:'toggle-task', payload: index})}
+          style={{textDecoration: task.isCompleted ? 'line-through' : 'none'}}
+        >{task.name}</p>
+      ))}
+    </div>
+  );
+};
+
+export default App
+```
