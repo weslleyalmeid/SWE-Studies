@@ -1697,7 +1697,7 @@ export default List;
 
 ### useLayoutEffect
 
-A diferença entre useEffect e useLayoutEffect, é que o useLayoutEffect é executado antes do DOM ser montado pelo react.
+A diferença entre useEffect e useLayoutEffect, é que o useLayoutEffect é executado antes do DOM ser montado pelo react. Utilizamos o useLayoutEffect quando queremos fazer algum ajuste no DOM baseado no DOM.
 
 ```jsx
 import { useState, useLayoutEffect } from "react";
