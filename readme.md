@@ -1482,3 +1482,243 @@ function App() {
 
 export default App
 ```
+
+### useContext
+
+Utilizado em conjunto com o contextAPI para passar props para uma árvore de componentes.
+
+
+App.jsx
+```jsx
+import ThemeContextProvider from "./contexts/theme-contex";
+import Greeting from "./Greeting";
+
+import Message from "./Message";
+
+const App = () => {
+  return (
+    <ThemeContextProvider>
+      <Message />
+      <Greeting />
+    </ThemeContextProvider>
+  );
+};
+
+export default App;
+```
+
+theme-contex.jsx
+```jsx
+import { useState, useContext, createContext } from "react";
+
+
+export const ThemeContext = createContext({
+    theme: 'light',
+    toggleTheme: () => {},
+});
+
+
+const ThemeContextProvider = ({ children }) => {
+    const [ theme, setTheme ] = useState('light');
+
+    const toggleTheme = () => {
+        if (theme === 'light') {
+            return setTheme('dark');
+        }
+
+        return setTheme('light');
+    };
+
+    return (
+        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+            {children}
+        </ThemeContext.Provider>
+    );
+};
+
+export default ThemeContextProvider;
+```
+
+Message.jsx
+```jsx
+import { ThemeContext } from "./contexts/theme-contex"
+
+const Message = () => {
+  return (
+    <>
+      <ThemeContext.Consumer>
+        {(value) => (
+          <div
+            style={{
+              padding: 20,
+              borderRadius: 10,
+              marginBottom: 10,
+              backgroundColor: value.theme === 'light' ? '#eee' : '#333',
+              color: value.theme === 'dark' ? '#eee' : '#333',
+            }}
+          >
+            <h1>Current theme: {value.theme}</h1>
+            <button onClick={() => value.toggleTheme()}> Toggle Theme </button>
+          </div>
+        )}
+      </ThemeContext.Consumer>
+    </>
+  );
+};
+
+export default Message
+```
+
+Greeting.jsx
+```jsx
+import { ThemeContext } from "./contexts/theme-contex"
+
+const Greeting = () => {
+  return (
+    <>
+      <ThemeContext.Consumer>
+        {(value) => (
+          <div
+            style={{
+              padding: 20,
+              borderRadius: 10,
+              backgroundColor: value.theme === 'light' ? '#eee' : '#333',
+              color: value.theme === 'dark' ? '#eee' : '#333',
+            }}
+          >
+            <h1>Hello world!</h1>
+          </div>
+        )}
+      </ThemeContext.Consumer>
+    </>
+  );
+};
+
+export default Greeting
+```
+
+### useMemo
+
+Utilizado para otimizar performance na aplicação, guarda o retorno da função na memória
+
+```js
+import { useState, useMemo } from "react";
+
+const App = () => {
+  const [number, setNumber] = useState(1);
+  const [text, setText] = useState('');
+
+  const doubleNumber = useMemo(() => {
+    slowFunction(number);
+  }, [number]);
+
+  return (
+    <>
+      <p>{number}</p>
+      <input value={text} onChange={(e) => setText(e.target.value)}/>
+      <button onClick={() => setNumber(2)}>Increment</button>
+      <p>text: {text}</p>
+    </>
+  );
+};
+
+const slowFunction = (num) => {
+  console.log('Slow function is being called!');
+  for (let i = 0; i <= 10000; i++) {}
+  return num * 2;
+};
+
+export default App;
+```
+### useCallback
+
+Toda vez que passo uma função como prop para algum componente, a função tem um custo grande de performance, a função esta sendo executada desnecessariamente. Utilizamos o useCallback para mitigar os riscos. O useCallback guarda a função na memória.
+
+App.jsx
+```js
+import { useState, useCallback } from "react";
+import List from "./List";
+
+
+const App = () => {
+  const [text, setText] = useState('');
+  const [resourceType, setResourceType] = useState('posts');
+
+  const getItems = useCallback(
+    async () => {
+      console.log('getItems is being called!');
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/${resourceType}`
+      );
+      const responseJSON = await response.json();
+
+      return responseJSON;
+    }, [resourceType]);
+
+  return (
+    <div>
+      <input value={text} onChange={(e) => setText(e.target.value)} />
+
+      <button onClick={() => setResourceType('posts')}>posts</button>
+      <button onClick={() => setResourceType('comments')}>comments</button>
+      <button onClick={() => setResourceType('todos')}>todos</button>
+
+      <List getItems={getItems} />
+    </div>
+  )
+};
+
+export default App;
+
+```
+
+List.jsx
+```js
+import { useEffect, useState } from "react"
+
+const List = ({ getItems }) => {
+    const [items, setItems] = useState([])
+
+    useEffect(() => {
+        getItems().then((result) => setItems(result));
+    }, [getItems]);
+
+    return (
+        <>
+            {items && items.map((item) => (
+                <p key={item.id}>{item?.title || item?.name}</p>
+            ))}
+        </>
+    )
+}
+
+export default List;
+```
+
+### useLayoutEffect
+
+A diferença entre useEffect e useLayoutEffect, é que o useLayoutEffect é executado antes do DOM ser montado pelo react.
+
+```jsx
+import { useState, useLayoutEffect } from "react";
+import List from "./List";
+
+
+const App = () => {
+  const [count, setCount] = useState(1);
+
+  useLayoutEffect(() => {
+    console.log(count);
+  }, [count])
+
+  return (
+    <div>
+      <h1>{count}</h1>
+
+      <button onClick={() => setCount((prev) => prev + 1)}>Increment</button>
+    </div>
+  )
+};
+
+export default App;
+```
