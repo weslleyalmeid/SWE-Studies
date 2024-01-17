@@ -1722,3 +1722,371 @@ const App = () => {
 
 export default App;
 ```
+
+## React Router
+
+Biblioteca utilizada para gerenciamento de rota.
+
+### Exemplo 1 - Básico
+
+main.jsx
+```js
+import { render } from 'preact'
+import { App } from './app.jsx'
+import './index.css'
+
+// 1- configurando router
+import {
+    createBrowserRouter,
+    RouterProvider
+} from 'react-router-dom'
+
+import Home from './routes/Home.jsx'
+import Contact from './routes/Contact.jsx'
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Home />
+    },
+    {
+        path: 'contact',
+        element: <Contact />
+    }
+ ]);
+
+render(<RouterProvider router={router} />, document.getElementById('app'))
+
+```
+
+app.jsx
+```js
+import './app.css'
+
+export function App() {
+  return (
+    <>
+    <p>Navbar</p>
+     <h1>React Router</h1>
+     <Outlet />
+     <footer></footer>
+    </>
+  )
+}
+```
+
+Home.jsx
+```js
+import React from 'react'
+
+const Home = () => {
+  return (
+    <h1>Home</h1>
+  )
+}
+
+export default Home
+```
+
+Contact.jsx
+```js
+import React from 'react'
+
+const Contact = () => {
+  return (
+    <h1>Contact</h1>
+  )
+}
+
+export default Contact
+```
+
+
+### Exemplo 2 - Reaproveitamento de estrutura
+
+main.jsx
+```js
+import { render } from 'preact'
+import { App } from './app.jsx'
+import './index.css'
+
+// 1- configurando router
+
+import {
+    createBrowserRouter,
+    RouterProvider
+} from 'react-router-dom'
+
+import Home from './routes/Home.jsx'
+import Contact from './routes/Contact.jsx'
+
+// inclusao como children para Outlet identificar alteracao
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <App />,
+        children: [
+            {
+                path: '/',
+                element: <Home />
+            },
+            {
+                path: 'contact',
+                element: <Contact />
+            }
+        ]
+    },
+
+ ]);
+
+render(<RouterProvider router={router} />, document.getElementById('app'))
+
+
+```
+
+app.jsx
+```js
+import './app.css'
+
+// 2 - reaproveitamento de estrutura
+import { Outlet } from 'react-router-dom'
+
+export function App() {
+  return (
+    <>
+    <p>Navbar</p>
+     <h1>React Router</h1>
+     <Outlet />
+     <footer></footer>
+    </>
+  )
+}
+```
+
+### Exemplo 3 - Página de Erro
+
+Basta incluir o errorElement.
+
+main.jsx
+```js
+import ErrorPage from './routes/ErrorPage.jsx'
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <App />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                path: '/',
+                element: <Home />
+            },
+            {
+                path: 'contact',
+                element: <Contact />
+            }
+        ]
+    },
+
+ ]);
+
+```
+
+### Exemplo 4 - Navbar
+
+navbar.jsx
+```js
+import { Link } from 'react-router-dom'
+
+const Navbar = () => {
+  return (
+    <nav>
+        <Link to='/'>Home</Link>
+        <Link to='/contact'>Contatos</Link>
+    </nav>
+  );
+};
+
+export default Navbar
+```
+
+app.jsx
+```js
+import './app.css'
+
+// 2 - reaproveitamento de estrutura
+import { Outlet } from 'react-router-dom'
+
+// 4 - navegando entre paginas
+import Navbar from './components/Navbar' 
+
+export function App() {
+  return (
+    <>
+    <Navbar />
+     <h1>React Router</h1>
+     <Outlet />
+     <footer></footer>
+    </>
+  )
+}
+```
+
+
+### Exemplo 5 - Dynamic routes, elementos com id único
+
+ContactDetails.jsx
+```js
+import { useParams } from "react-router-dom"
+
+const ContactDetails = () => {
+
+    const { id } = useParams();
+    return (
+        <div>
+            <h1>Exibindo mais informações do contato: {id}</h1>
+        </div>
+    )
+}
+
+export default ContactDetails
+```
+
+Contact.jsx
+```js
+import { Link } from 'react-router-dom'
+
+const Contact = () => {
+  return (
+    <div>
+
+
+      <h1>Página de Contatos</h1>
+      {/* 5 - dynamic routes */}
+      <p>
+        <Link to='/contact/1'>Forma de contato 1</Link>
+      </p>
+      <p>
+        <Link to='/contact/2'>Forma de contato 2</Link>
+      </p>
+      <p>
+        <Link to='/contact/3'>Forma de contato 3</Link>
+      </p>
+    </div>
+  )
+}
+
+export default Contact
+```
+
+Inclusão do dynamic routes na main.
+
+main.jsx
+```js
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <App />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                path: '/',
+                element: <Home />
+            },
+            {
+                path: 'contact',
+                element: <Contact />
+            },
+            // 5 - dynamic routes
+            {
+                path: '/contact/:id',
+                element: <ContactDetails />
+            }
+        ]
+    },
+ ]);
+```
+
+### Exemplo 6 - Redirect e Redirect old page
+
+Para redirecionar é utilizado o Navigate.
+
+
+ContactDetails.jsx
+```jsx
+import { useParams, useNavigate } from "react-router-dom"
+
+const ContactDetails = () => {
+
+    const { id } = useParams();
+
+    // 6 - redirect
+    const navigate = useNavigate();
+
+    const handleContact = () => {
+        console.log('Contato enviado!');
+        return navigate('/');
+    }
+
+    return (
+        <div>
+            <h1>Exibindo mais informações do contato: {id}</h1>
+            <button onClick={handleContact}>Enviar mensagem</button>
+        </div>
+    )
+}
+
+export default ContactDetails
+```
+
+Quando uma página Oldpage é descontínuada e gostaríamos de manter o tráfego dela para o site, utilizamos o Navigate.
+
+main.jsx
+```jsx
+import { render } from 'preact'
+import { App } from './app.jsx'
+import './index.css'
+
+// 1- configurando router
+
+import {
+    createBrowserRouter,
+    RouterProvider,
+    Navigate
+} from 'react-router-dom'
+
+import Home from './routes/Home.jsx'
+import Contact from './routes/Contact.jsx'
+import ErrorPage from './routes/ErrorPage.jsx'
+import ContactDetails from './routes/ContactDetails.jsx'
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <App />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                path: '/',
+                element: <Home />
+            },
+            {
+                path: 'contact',
+                element: <Contact />
+            },
+            // 5 - dynamic routes
+            {
+                path: '/contact/:id',
+                element: <ContactDetails />
+            },
+            // 7 - navigate para paginas nao existentes
+            {
+                path: 'oldcontact',
+                element: <Navigate to='/contact' />
+            }
+        ]
+    },
+ ]);
+
+render(<RouterProvider router={router} />, document.getElementById('app'))
+```
